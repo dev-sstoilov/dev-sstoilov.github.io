@@ -1,1 +1,1 @@
-***Available at: http://sstoilov.fpr.net/, https://stefanstoilov777.github.io/-host/***
+***Available at: https://dev-sstoilov.github.io/
