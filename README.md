@@ -1,1 +1,1 @@
-***Available at: https://dev-sstoilov.github.io/
+Available at: https://dev-sstoilov.github.io/
