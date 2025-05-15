@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stefan Stoilov - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #10a37f;
+            --background-color: #000000;
+            --content-bg: rgba(255, 255, 255, 0.05);
+            --hover-bg: rgba(255, 255, 255, 0.08);
+            --text-color: #ffffff;
+            --button-bg: rgba(255, 255, 255, 0.1);
+            --button-hover-bg: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--background-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 30%;
+            transform: translateY(-50%);
+            width: 260px;
+            padding: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+            background: transparent;
+            position: relative;
+            display: flex;
+            align-items: center;
+            border: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .tab::after {
+            content: '›';
+            position: absolute;
+            right: 20px;
+            opacity: 0.8;
+        }
+
+        .tab:hover {
+            background: var(--hover-bg) !important;
+        }
+
+        .tab.active {
+            background: #000000 !important;
+            font-weight: 500;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            display: none;
+            width: 100%;
+            background: var(--content-bg);
+            border-radius: 16px;
+            padding: 40px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        /* Text Elements */
+        h1, h2, h3, p, .skill {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 10px 0;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 25px 0 15px;
+        }
+
+        /* Certificate Grid */
+        .certificates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .certificates img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+        }
+
+        .certificates img:hover {
+            transform: scale(1.1);
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Certificate Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeInOverlay 0.3s ease-in-out;
+        }
+
+        .overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 20px;
+            object-fit: contain;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        img.profile {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .skills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .skill {
+            background: var(--button-bg);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        /* Language Toggle Button */
+        .language-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            background: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            z-index: 1000;
+        }
+
+        .language-toggle:hover {
+            background: var(--button-hover-bg);
+            transform: translateX(-50%) scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="tabs">
+            <button class="tab active" data-tab="about">About</button>
+            <button class="tab" data-tab="skills">Skills</button>
+            <button class="tab" data-tab="services">Services</button>
+            <button class="tab" data-tab="certs">Certificates</button>
+            <button class="tab" data-tab="projects">Projects</button>
+            <button class="tab" data-tab="contact">Contact</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div id="about" class="content active">
+            <img src="profile.jpg" alt="Stefan Stoilov" class="profile">
+            <h1>Stefan Nikolaev Stoilov</h1>
+            <h2>Cybersecurity Enthusiast, Coder, Future Engineer</h2>
+        </div>
+
+        <div id="skills" class="content">
+            <h3>Technical Skills</h3>
+            <div class="skills">
+                <div class="skill">Coding</div>
+                <div class="skill">Cybersecurity</div>
+                <div class="skill">Building Robots</div>
+            </div>
+
+            <h3>Programming Languages</h3>
+            <div class="skills">
+                <div class="skill">Python</div>
+                <div class="skill">HTML</div>
+                <div class="skill">JavaScript</div>
+                <div class="skill">Java (a bit)</div>
+            </div>
+        </div>
+
+        <div id="services" class="content">
+            <h3>My Services</h3>
+            <div class="skills">
+                <div class="skill">Making custom programs per user requirements</div>
+                <div class="skill">Programming lessons</div>
+                <div class="skill">Robotics lessons</div>
+            </div>
+        </div>
+
+        <div id="certs" class="content">
+            <h3>Certificates</h3>
+            <div class="certificates" id="certGallery">
+                <!-- Certificates will be loaded here -->
+            </div>
+        </div>
+
+        <div id="projects" class="content">
+            <h3>My Current Projects</h3>
+            <div class="certificates">
+                <img src="https://raw.githubusercontent.com/StefanStoilov777/-host/refs/heads/main/unnamed.jpg" 
+                     alt="AI Robot Project" 
+                     style="width: 200px; height: 150px; object-fit: cover;">
+            </div>
+            <p style="margin-top: 20px; opacity: 0.8;">
+                <span class="project-description"></span>
+            </p>
+        </div>
+
+        <div id="contact" class="content">
+            <h3>Contact Information</h3>
+            <p>Email: <a href="mailto:sstoilov777@gmail.com" 
+                       style="color: var(--primary-color); 
+                              text-decoration: none;
+                              font-weight: 500;">
+                      sstoilov777@gmail.com</a></p>
+            <p>Discord: _thedeveloperbg_</p>
+        </div>
+    </main>
+
+    <!-- Single language toggle button outside content -->
+    <button class="language-toggle">Смени на Български</button>
+
+    <script>
+        // Language toggle logic
+        const languageToggle = document.querySelector('.language-toggle');
+        const tabs = document.querySelectorAll('.tab');
+
+        const englishContent = {
+            about: {
+                title: "Stefan Nikolaev Stoilov",
+                subtitle: "Cybersecurity Enthusiast, Coder, Future Engineer"
+            },
+            skills: {
+                technicalSkills: "Technical Skills",
+                programmingLanguages: "Programming Languages",
+                skills: ["Coding", "Cybersecurity", "Building Robots"],
+                languages: ["Python", "HTML", "JavaScript", "Java (a bit)"]
+            },
+            services: {
+                title: "My Services",
+                services: [
+                    "Making custom programs per user requirements",
+                    "Programming lessons",
+                    "Robotics lessons"
+                ]
+            },
+            certs: {
+                title: "Certificates"
+            },
+            projects: {
+                title: "My Current Projects",
+                sampleText: "I am working on putting a locally hosted GPT (AI) I made in control of this robot using a Raspberry Pi Zero on-board computer. It will be capable of replying to your speech with its voice and execute movements based on it."
+            },
+            contact: {
+                title: "Contact Information",
+                email: "Email: ",
+                discord: "Discord: "
+            },
+            tabs: {
+                about: "About",
+                skills: "Skills",
+                services: "Services",
+                certs: "Certificates",
+                projects: "Projects",
+                contact: "Contact"
+            }
+        };
+
+        const bulgarianContent = {
+            about: {
+                title: "Стефан Николаев Стоилов",
+                subtitle: "Ентусиаст по киберсигурност, програмист, бъдещ инженер"
+            },
+            skills: {
+                technicalSkills: "Технически Умения",
+                programmingLanguages: "Програмни Езици",
+                skills: ["Програмиране", "Киберсигурност", "Конструиране/дизайн на роботи"],
+                languages: ["Python", "HTML", "JavaScript", "Java (малко)"]
+            },
+            services: {
+                title: "Моите Услуги",
+                services: [
+                    "Създаване на програми по поръчка",
+                    "Уроци по програмиране",
+                    "Уроци по роботика"
+                ]
+            },
+            certs: {
+                title: "Сертификати"
+            },
+            projects: {
+                title: "Текущи Проекти",
+                sampleText: "В момента работя върху интеграция на локално хостван GPT модел (Изкуствен Интелект), който създадох за управление на този робот с помощта на Raspberry Pi Zero платков компютър. Роботът ще може да отговаря на това което чува със свой глас и физически да прави движения според разговора."
+            },
+            contact: {
+                title: "Контактна Информация",
+                email: "Имейл: ",
+                discord: "Дискорд: "
+            },
+            tabs: {
+                about: "За Мен",
+                skills: "Умения",
+                services: "Услуги",
+                certs: "Сертификати",
+                projects: "Проекти",
+                contact: "Контакт"
+            }
+        };
+
+        let isEnglish = true;
+
+        // Initialize the page in English
+        updateLanguage(isEnglish);
+
+        languageToggle.addEventListener('click', () => {
+            isEnglish = !isEnglish;
+            updateLanguage(isEnglish);
+        });
+
+        function updateLanguage(isEnglish) {
+            const content = isEnglish ? englishContent : bulgarianContent;
+            const toggleText = isEnglish ? "Смени на Български" : "Switch to English";
+
+            // Update toggle button text
+            languageToggle.textContent = toggleText;
+
+            // Update tab names
+            tabs.forEach(tab => {
+                const tabId = tab.dataset.tab;
+                tab.textContent = content.tabs[tabId];
+            });
+
+            // Update About section
+            const aboutSection = document.getElementById('about');
+            aboutSection.querySelector('h1').textContent = content.about.title;
+            aboutSection.querySelector('h2').textContent = content.about.subtitle;
+
+            // Update Skills section
+            const skillsSection = document.getElementById('skills');
+            skillsSection.querySelector('h3:nth-of-type(1)').textContent = content.skills.technicalSkills;
+            skillsSection.querySelector('h3:nth-of-type(2)').textContent = content.skills.programmingLanguages;
+            const skillElements = skillsSection.querySelectorAll('.skill');
+            content.skills.skills.concat(content.skills.languages).forEach((skill, index) => {
+                skillElements[index].textContent = skill;
+            });
+
+            // Update Services section
+            const servicesSection = document.getElementById('services');
+            servicesSection.querySelector('h3').textContent = content.services.title;
+            const serviceElements = servicesSection.querySelectorAll('.skill');
+            content.services.services.forEach((service, index) => {
+                serviceElements[index].textContent = service;
+            });
+
+            // Update Certificates section
+            const certsSection = document.getElementById('certs');
+            certsSection.querySelector('h3').textContent = content.certs.title;
+
+            // Update Projects section
+            const projectsSection = document.getElementById('projects');
+            projectsSection.querySelector('h3').textContent = content.projects.title;
+            projectsSection.querySelector('.project-description').textContent = content.projects.sampleText;
+
+            // Update Contact section
+            const contactSection = document.getElementById('contact');
+            contactSection.querySelector('h3').textContent = content.contact.title;
+            contactSection.querySelector('p:nth-of-type(1)').innerHTML = `
+                ${content.contact.email} <a href="mailto:sstoilov777@gmail.com" 
+                style="color: var(--primary-color); 
+                       text-decoration: none;
+                       font-weight: 500;">
+                sstoilov777@gmail.com</a>`;
+            contactSection.querySelector('p:nth-of-type(2)').innerHTML = `
+                ${content.contact.discord} <i>_thedeveloperbg_<i>`;
+        }
+
+        // Certificate loading
+        const certGallery = document.getElementById("certGallery");
+        const certImages = [
+            "https://github.com/StefanStoilov777/-host/blob/main/CS50P.png?raw=true",
+            // Add more certificate URLs here
+        ];
+
+        if (certGallery) {
+            certImages.forEach(url => {
+                let imgElem = document.createElement("img");
+                imgElem.src = url;
+                imgElem.alt = "Certificate";
+                imgElem.onclick = () => openCert(imgElem.src);
+                certGallery.appendChild(imgElem);
+            });
+        }
+
+        // Tab switching logic
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Hide all content
+                document.querySelectorAll('.content').forEach(c => {
+                    c.classList.remove('active');
+                });
+
+                // Activate clicked tab and content
+                this.classList.add('active');
+                const tabId = this.dataset.tab;
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Certificate overlay with animation
+        function openCert(src) {
+            let overlay = document.createElement("div");
+            overlay.className = "overlay";
+            overlay.onclick = () => overlay.remove();
+            
+            let img = document.createElement("img");
+            img.src = src;
+            overlay.appendChild(img);
+            document.body.appendChild(overlay);
+        }
+
+        // Easter Egg
+        document.addEventListener("keydown", (e) => {
+            if (e.code === "KeyG") {
+                alert("Easter Egg Unlocked! Play a quick game!");
+                window.location.href = "op00192.html";
+            }
+        });
+    </script>
+</body>
+</html>
