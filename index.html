@@ -16,6 +16,16 @@
             --button-hover-bg: rgba(255, 255, 255, 0.15);
         }
 
+            :root.light-theme {
+                --primary-color: #10a37f;
+                --background-color: #ffffff;
+                --content-bg: rgba(0, 0, 0, 0.05);
+                --hover-bg: rgba(0, 0, 0, 0.08);
+                --text-color: #000000;
+                --button-bg: rgba(0, 0, 0, 0.1);
+                --button-hover-bg: rgba(0, 0, 0, 0.15);
+            }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
@@ -25,8 +35,108 @@
             color: var(--text-color);
             overflow-x: hidden;
             font-weight: 400;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        /* Sidebar Styles */
+
+        /* Settings Button */
+        .settings-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+            .settings-btn:hover {
+                background: var(--hover-bg);
+            }
+
+            .settings-btn img {
+                width: 24px;
+                height: 24px;
+            }
+
+        /* Settings Menu */
+        .settings-menu {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: var(--content-bg);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+            min-width: 160px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--hover-bg);
+        }
+
+            .settings-menu.active {
+                display: block;
+                animation: fadeIn 0.2s ease-in-out;
+            }
+
+        .settings-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+            .theme-switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--button-bg);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+            .theme-slider:before {
+                position: absolute;
+                content: "";
+                height: 16px;
+                width: 16px;
+                left: 2px;
+                bottom: 2px;
+                background-color: var(--text-color);
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+        input:checked + .theme-slider {
+            background-color: var(--primary-color);
+        }
+
+            input:checked + .theme-slider:before {
+                transform: translateX(20px);
+            }
+
+        /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
@@ -57,23 +167,23 @@
             font-size: 0.9rem;
         }
 
-        .tab::after {
-            content: '›';
-            position: absolute;
-            right: 20px;
-            opacity: 0.8;
-        }
+            .tab::after {
+                content: '›';
+                position: absolute;
+                right: 20px;
+                opacity: 0.8;
+            }
 
-        .tab:hover {
-            background: var(--hover-bg) !important;
-        }
+            .tab:hover {
+                background: var(--hover-bg) !important;
+            }
 
-        .tab.active {
-            background: #000000 !important;
-            font-weight: 500;
-        }
+            .tab.active {
+                background: var(--content-bg) !important;
+                font-weight: 500;
+            }
 
-        /* Main Content Styles */
+        /* Main Content */
         .main-content {
             position: absolute;
             left: 50%;
@@ -94,15 +204,17 @@
             border-radius: 16px;
             padding: 40px;
             animation: fadeIn 0.3s ease-in-out;
+            transition: background-color 0.3s ease;
         }
 
-        .content.active {
-            display: block;
-        }
+            .content.active {
+                display: block;
+            }
 
         /* Text Elements */
         h1, h2, h3, p, .skill {
             font-family: 'Inter', sans-serif;
+            transition: color 0.3s ease;
         }
 
         h1 {
@@ -114,7 +226,8 @@
         h2 {
             font-size: 1.5rem;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-color);
+            opacity: 0.8;
             margin: 10px 0;
         }
 
@@ -132,21 +245,21 @@
             margin-top: 20px;
         }
 
-        .certificates img {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
-        }
+            .certificates img {
+                width: 90px;
+                height: 90px;
+                object-fit: cover;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+            }
 
-        .certificates img:hover {
-            transform: scale(1.1);
-            z-index: 2;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
+                .certificates img:hover {
+                    transform: scale(1.1);
+                    z-index: 2;
+                    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+                }
 
         /* Certificate Overlay */
         .overlay {
@@ -163,22 +276,32 @@
             animation: fadeInOverlay 0.3s ease-in-out;
         }
 
-        .overlay img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 20px;
-            object-fit: contain;
-            animation: fadeIn 0.3s ease-in-out;
-        }
+            .overlay img {
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 20px;
+                object-fit: contain;
+                animation: fadeIn 0.3s ease-in-out;
+            }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes fadeInOverlay {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         img.profile {
@@ -205,7 +328,7 @@
             transition: background 0.3s ease;
         }
 
-        /* Language Toggle Button */
+        /* Language Toggle */
         .language-toggle {
             position: fixed;
             bottom: 20px;
@@ -223,13 +346,29 @@
             z-index: 1000;
         }
 
-        .language-toggle:hover {
-            background: var(--button-hover-bg);
-            transform: translateX(-50%) scale(1.05);
-        }
+            .language-toggle:hover {
+                background: var(--button-hover-bg);
+                transform: translateX(-50%) scale(1.05);
+            }
     </style>
 </head>
 <body>
+    <!-- Settings Button -->
+    <button class="settings-btn" id="settingsBtn">
+        <img id="settingsIcon" src="settings-light.png" alt="Settings">
+    </button>
+
+    <!-- Settings Menu -->
+    <div class="settings-menu" id="settingsMenu">
+        <div class="settings-menu-item">
+            <span id="themeText">Change to dark theme</span>
+            <label class="theme-switch">
+                <input type="checkbox" id="themeCheckbox">
+                <span class="theme-slider"></span>
+            </label>
+        </div>
+    </div>
+
     <nav class="sidebar">
         <div class="tabs">
             <button class="tab active" data-tab="about">About</button>
@@ -277,41 +416,91 @@
         <div id="certs" class="content">
             <h3>Certificates</h3>
             <div class="certificates" id="certGallery">
-                <!-- Certificates will be loaded here -->
+                
             </div>
         </div>
 
         <div id="projects" class="content">
             <h3>My Current Projects</h3>
             <div class="certificates">
-                <img src="https://github.com/dev-sstoilov/dev-sstoilov.github.io/blob/main/unnamed.jpg?raw=true" 
-                     alt="AI Robot Project" 
+                <img src="https://github.com/dev-sstoilov/dev-sstoilov.github.io/blob/main/unnamed.jpg?raw=true"
+                     alt="AI Robot Project"
                      style="width: 200px; height: 150px; object-fit: cover;">
             </div>
             <p style="margin-top: 20px; opacity: 0.8;">
-                <span class="project-description"></span>
+                <span class="project-description">I am working on putting a locally hosted GPT (AI) I made in control of this robot using a Raspberry Pi Zero on-board computer. It will be capable of replying to your speech with its voice and execute movements based on it.</span>
             </p>
         </div>
 
         <div id="contact" class="content">
             <h3>Contact Information</h3>
-            <p>Email: <a href="mailto:sstoilov777@gmail.com" 
-                       style="color: var(--primary-color); 
+            <p>
+                Email: <a href="mailto:sstoilov777@gmail.com"
+                          style="color: var(--primary-color);
                               text-decoration: none;
                               font-weight: 500;">
-                      sstoilov777@gmail.com</a></p>
+                    sstoilov777@gmail.com
+                </a>
+            </p>
             <p>Discord: _thedeveloperbg_</p>
         </div>
     </main>
 
-    <!-- Single language toggle button outside content -->
+    <!-- Language toggle button -->
     <button class="language-toggle">Смени на Български</button>
 
     <script>
-        // Language toggle logic
-        const languageToggle = document.querySelector('.language-toggle');
-        const tabs = document.querySelectorAll('.tab');
+        // Cookie functions
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+        }
 
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [cookieName, cookieValue] = cookie.split('=');
+                if (cookieName.trim() === name) return cookieValue;
+            }
+            return null;
+        }
+
+        // Theme management
+        function updateThemeIcon() {
+            const isLight = document.documentElement.classList.contains('light-theme');
+            document.getElementById('settingsIcon').src = isLight ?
+                'settings-light.png' : 'settings-dark.png';
+        }
+
+        function applyTheme(isLight) {
+            const themeText = document.getElementById('themeText');
+            if (isLight) {
+                document.documentElement.classList.add('light-theme');
+                document.getElementById('themeCheckbox').checked = true;
+                themeText.textContent = 'Change to dark theme';
+            } else {
+                document.documentElement.classList.remove('light-theme');
+                document.getElementById('themeCheckbox').checked = false;
+                themeText.textContent = 'Change to light theme';
+            }
+            updateThemeIcon();
+        }
+
+        // Initial theme setup
+        const savedTheme = getCookie('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let currentTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+        applyTheme(currentTheme === 'light');
+
+        // Theme toggle
+        document.getElementById('themeCheckbox').addEventListener('change', (e) => {
+            const isLight = e.target.checked;
+            applyTheme(isLight);
+            setCookie('theme', isLight ? 'light' : 'dark', 30);
+        });
+
+        // Language content
         const englishContent = {
             about: {
                 title: "Stefan Nikolaev Stoilov",
@@ -394,15 +583,10 @@
             }
         };
 
-        let isEnglish = true;
-
-        // Initialize the page in English
-        updateLanguage(isEnglish);
-
-        languageToggle.addEventListener('click', () => {
-            isEnglish = !isEnglish;
-            updateLanguage(isEnglish);
-        });
+        // Language management
+        const savedLang = getCookie('language');
+        let isEnglish = savedLang ? savedLang === 'en' : true;
+        const languageToggle = document.querySelector('.language-toggle');
 
         function updateLanguage(isEnglish) {
             const content = isEnglish ? englishContent : bulgarianContent;
@@ -412,7 +596,7 @@
             languageToggle.textContent = toggleText;
 
             // Update tab names
-            tabs.forEach(tab => {
+            document.querySelectorAll('.tab').forEach(tab => {
                 const tabId = tab.dataset.tab;
                 tab.textContent = content.tabs[tabId];
             });
@@ -452,20 +636,43 @@
             const contactSection = document.getElementById('contact');
             contactSection.querySelector('h3').textContent = content.contact.title;
             contactSection.querySelector('p:nth-of-type(1)').innerHTML = `
-                ${content.contact.email} <a href="mailto:sstoilov777@gmail.com" 
-                style="color: var(--primary-color); 
-                       text-decoration: none;
-                       font-weight: 500;">
-                sstoilov777@gmail.com</a>`;
+                    ${content.contact.email} <a href="mailto:sstoilov777@gmail.com"
+                    style="color: var(--primary-color);
+                           text-decoration: none;
+                           font-weight: 500;">
+                    sstoilov777@gmail.com</a>`;
             contactSection.querySelector('p:nth-of-type(2)').innerHTML = `
-                ${content.contact.discord} <i>_thedeveloperbg_<i>`;
+                    ${content.contact.discord} <i>_thedeveloperbg_<i>`;
+
+            setCookie('language', isEnglish ? 'en' : 'bg', 30);
         }
+
+        // Initialize language
+        updateLanguage(isEnglish);
+
+        languageToggle.addEventListener('click', () => {
+            isEnglish = !isEnglish;
+            updateLanguage(isEnglish);
+        });
+
+        // Settings menu toggle
+        document.getElementById('settingsBtn').addEventListener('click', (e) => {
+            const menu = document.getElementById('settingsMenu');
+            menu.classList.toggle('active');
+            e.stopPropagation();
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.settings-menu') && !e.target.closest('#settingsBtn')) {
+                document.getElementById('settingsMenu').classList.remove('active');
+            }
+        });
 
         // Certificate loading
         const certGallery = document.getElementById("certGallery");
         const certImages = [
             "https://raw.githubusercontent.com/dev-sstoilov/dev-sstoilov.github.io/refs/heads/main/CS50P.png",
-            // Add more certificate URLs here
         ];
 
         if (certGallery) {
@@ -480,12 +687,12 @@
 
         // Tab switching logic
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
+            tab.addEventListener('click', function () {
                 // Remove active class from all tabs
                 document.querySelectorAll('.tab').forEach(t => {
                     t.classList.remove('active');
                 });
-                
+
                 // Hide all content
                 document.querySelectorAll('.content').forEach(c => {
                     c.classList.remove('active');
@@ -503,7 +710,7 @@
             let overlay = document.createElement("div");
             overlay.className = "overlay";
             overlay.onclick = () => overlay.remove();
-            
+
             let img = document.createElement("img");
             img.src = src;
             overlay.appendChild(img);
