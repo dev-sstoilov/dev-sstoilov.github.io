@@ -16,15 +16,15 @@
             --button-hover-bg: rgba(255, 255, 255, 0.15);
         }
 
-            :root.light-theme {
-                --primary-color: #10a37f;
-                --background-color: #ffffff;
-                --content-bg: rgba(0, 0, 0, 0.05);
-                --hover-bg: rgba(0, 0, 0, 0.08);
-                --text-color: #000000;
-                --button-bg: rgba(0, 0, 0, 0.1);
-                --button-hover-bg: rgba(0, 0, 0, 0.15);
-            }
+        :root.light-theme {
+            --primary-color: #10a37f;
+            --background-color: #ffffff;
+            --content-bg: rgba(0, 0, 0, 0.05);
+            --hover-bg: rgba(0, 0, 0, 0.08);
+            --text-color: #000000;
+            --button-bg: rgba(0, 0, 0, 0.1);
+            --button-hover-bg: rgba(0, 0, 0, 0.15);
+        }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -52,14 +52,14 @@
             transition: all 0.3s ease;
         }
 
-            .settings-btn:hover {
-                background: var(--hover-bg);
-            }
+        .settings-btn:hover {
+            background: var(--hover-bg);
+        }
 
-            .settings-btn img {
-                width: 24px;
-                height: 24px;
-            }
+        .settings-btn img {
+            width: 24px;
+            height: 24px;
+        }
 
         /* Settings Menu */
         .settings-menu {
@@ -77,10 +77,10 @@
             border: 1px solid var(--hover-bg);
         }
 
-            .settings-menu.active {
-                display: block;
-                animation: fadeIn 0.2s ease-in-out;
-            }
+        .settings-menu.active {
+            display: block;
+            animation: fadeIn 0.2s ease-in-out;
+        }
 
         .settings-menu-item {
             display: flex;
@@ -98,11 +98,11 @@
             height: 20px;
         }
 
-            .theme-switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
         .theme-slider {
             position: absolute;
@@ -116,25 +116,25 @@
             border-radius: 34px;
         }
 
-            .theme-slider:before {
-                position: absolute;
-                content: "";
-                height: 16px;
-                width: 16px;
-                left: 2px;
-                bottom: 2px;
-                background-color: var(--text-color);
-                transition: .4s;
-                border-radius: 50%;
-            }
+        .theme-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: var(--text-color);
+            transition: .4s;
+            border-radius: 50%;
+        }
 
         input:checked + .theme-slider {
             background-color: var(--primary-color);
         }
 
-            input:checked + .theme-slider:before {
-                transform: translateX(20px);
-            }
+        input:checked + .theme-slider:before {
+            transform: translateX(20px);
+        }
 
         /* Sidebar */
         .sidebar {
@@ -167,21 +167,21 @@
             font-size: 0.9rem;
         }
 
-            .tab::after {
-                content: '›';
-                position: absolute;
-                right: 20px;
-                opacity: 0.8;
-            }
+        .tab::after {
+            content: '›';
+            position: absolute;
+            right: 20px;
+            opacity: 0.8;
+        }
 
-            .tab:hover {
-                background: var(--hover-bg) !important;
-            }
+        .tab:hover {
+            background: var(--hover-bg) !important;
+        }
 
-            .tab.active {
-                background: var(--content-bg) !important;
-                font-weight: 500;
-            }
+        .tab.active {
+            background: var(--content-bg) !important;
+            font-weight: 500;
+        }
 
         /* Main Content */
         .main-content {
@@ -207,9 +207,9 @@
             transition: background-color 0.3s ease;
         }
 
-            .content.active {
-                display: block;
-            }
+        .content.active {
+            display: block;
+        }
 
         /* Text Elements */
         h1, h2, h3, p, .skill {
@@ -245,21 +245,21 @@
             margin-top: 20px;
         }
 
-            .certificates img {
-                width: 90px;
-                height: 90px;
-                object-fit: cover;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-            }
+        .certificates img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+        }
 
-                .certificates img:hover {
-                    transform: scale(1.1);
-                    z-index: 2;
-                    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-                }
+        .certificates img:hover {
+            transform: scale(1.1);
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
 
         /* Certificate Overlay */
         .overlay {
@@ -276,19 +276,18 @@
             animation: fadeInOverlay 0.3s ease-in-out;
         }
 
-            .overlay img {
-                max-width: 90%;
-                max-height: 90%;
-                border-radius: 20px;
-                object-fit: contain;
-                animation: fadeIn 0.3s ease-in-out;
-            }
+        .overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 20px;
+            object-fit: contain;
+            animation: fadeIn 0.3s ease-in-out;
+        }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
             }
-
             to {
                 opacity: 1;
             }
@@ -298,7 +297,6 @@
             from {
                 opacity: 0;
             }
-
             to {
                 opacity: 1;
             }
@@ -346,10 +344,121 @@
             z-index: 1000;
         }
 
-            .language-toggle:hover {
-                background: var(--button-hover-bg);
-                transform: translateX(-50%) scale(1.05);
+        .language-toggle:hover {
+            background: var(--button-hover-bg);
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--content-bg);
+            padding: 15px 0;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--hover-bg);
+            z-index: 999;
+        }
+
+        .mobile-tab-names {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 10px 15px;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .mobile-tab-names::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .mobile-tab-name {
+            font-size: 0.85rem;
+            padding: 5px 10px;
+            white-space: nowrap;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-tab-name.active {
+            opacity: 1;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .mobile-nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .mobile-nav-btn {
+            background: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-btn:hover {
+            background: var(--button-hover-bg);
+            transform: scale(1.05);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
             }
+            
+            .mobile-nav {
+                display: block;
+            }
+            
+            .main-content {
+                top: 45%;
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+            
+            .language-toggle {
+                bottom: 90px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.2rem;
+            }
+            
+            .mobile-tab-name {
+                font-size: 0.75rem;
+                padding: 5px;
+            }
+            
+            .mobile-nav-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -416,7 +525,7 @@
         <div id="certs" class="content">
             <h3>Certificates</h3>
             <div class="certificates" id="certGallery">
-                
+                <!-- Certificates will be populated by JavaScript -->
             </div>
         </div>
 
@@ -445,6 +554,22 @@
             <p>Discord: _thedeveloperbg_</p>
         </div>
     </main>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+        <div class="mobile-tab-names" id="mobileTabNames">
+            <span class="mobile-tab-name active" data-tab="about">About</span>
+            <span class="mobile-tab-name" data-tab="skills">Skills</span>
+            <span class="mobile-tab-name" data-tab="services">Services</span>
+            <span class="mobile-tab-name" data-tab="certs">Certificates</span>
+            <span class="mobile-tab-name" data-tab="projects">Projects</span>
+            <span class="mobile-tab-name" data-tab="contact">Contact</span>
+        </div>
+        <div class="mobile-nav-buttons">
+            <button class="mobile-nav-btn" id="prevTab">↑</button>
+            <button class="mobile-nav-btn" id="nextTab">↓</button>
+        </div>
+    </div>
 
     <!-- Language toggle button -->
     <button class="language-toggle">Смени на Български</button>
@@ -601,6 +726,12 @@
                 tab.textContent = content.tabs[tabId];
             });
 
+            // Update mobile tab names
+            document.querySelectorAll('.mobile-tab-name').forEach(tab => {
+                const tabId = tab.dataset.tab;
+                tab.textContent = content.tabs[tabId];
+            });
+
             // Update About section
             const aboutSection = document.getElementById('about');
             aboutSection.querySelector('h1').textContent = content.about.title;
@@ -687,23 +818,62 @@
         }
 
         // Tab switching logic
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function () {
-                // Remove active class from all tabs
-                document.querySelectorAll('.tab').forEach(t => {
-                    t.classList.remove('active');
-                });
+        const tabs = ['about', 'skills', 'services', 'certs', 'projects', 'contact'];
+        let currentTabIndex = 0;
 
-                // Hide all content
-                document.querySelectorAll('.content').forEach(c => {
-                    c.classList.remove('active');
-                });
-
-                // Activate clicked tab and content
-                this.classList.add('active');
-                const tabId = this.dataset.tab;
-                document.getElementById(tabId).classList.add('active');
+        function switchTab(tabId) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
             });
+            
+            // Remove active class from all mobile tab names
+            document.querySelectorAll('.mobile-tab-name').forEach(t => {
+                t.classList.remove('active');
+            });
+
+            // Hide all content
+            document.querySelectorAll('.content').forEach(c => {
+                c.classList.remove('active');
+            });
+
+            // Activate clicked tab and content
+            const tabButton = document.querySelector(`.tab[data-tab="${tabId}"]`);
+            if (tabButton) tabButton.classList.add('active');
+            
+            // Activate mobile tab name
+            const mobileTab = document.querySelector(`.mobile-tab-name[data-tab="${tabId}"]`);
+            if (mobileTab) mobileTab.classList.add('active');
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update current tab index
+            currentTabIndex = tabs.indexOf(tabId);
+        }
+
+        // Initialize tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                switchTab(this.dataset.tab);
+            });
+        });
+        
+        // Mobile tab navigation
+        document.querySelectorAll('.mobile-tab-name').forEach(tab => {
+            tab.addEventListener('click', function() {
+                switchTab(this.dataset.tab);
+            });
+        });
+        
+        // Previous/Next buttons
+        document.getElementById('prevTab').addEventListener('click', () => {
+            currentTabIndex = (currentTabIndex - 1 + tabs.length) % tabs.length;
+            switchTab(tabs[currentTabIndex]);
+        });
+        
+        document.getElementById('nextTab').addEventListener('click', () => {
+            currentTabIndex = (currentTabIndex + 1) % tabs.length;
+            switchTab(tabs[currentTabIndex]);
         });
 
         // Certificate overlay with animation
