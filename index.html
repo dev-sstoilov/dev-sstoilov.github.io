@@ -415,6 +415,27 @@
             transform: scale(1.05);
         }
 
+        /* Language toggle in settings menu */
+        .language-toggle-menu {
+            display: none;
+            width: 100%;
+            padding: 8px 16px;
+            background: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .language-toggle-menu:hover {
+            background: var(--button-hover-bg);
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .sidebar {
@@ -435,7 +456,11 @@
             }
             
             .language-toggle {
-                bottom: 90px;
+                display: none;
+            }
+            
+            .language-toggle-menu {
+                display: block;
             }
         }
 
@@ -458,6 +483,12 @@
                 height: 45px;
                 font-size: 1.3rem;
             }
+            
+            .settings-menu {
+                top: 50px;
+                right: 15px;
+                min-width: 180px;
+            }
         }
     </style>
 </head>
@@ -476,6 +507,7 @@
                 <span class="theme-slider"></span>
             </label>
         </div>
+        <button class="language-toggle-menu" id="languageToggleMenu">Смени на Български</button>
     </div>
 
     <nav class="sidebar">
@@ -571,8 +603,8 @@
         </div>
     </div>
 
-    <!-- Language toggle button -->
-    <button class="language-toggle">Смени на Български</button>
+    <!-- Language toggle button (Desktop only) -->
+    <button class="language-toggle" id="languageToggle">Смени на Български</button>
 
     <script>
         // Cookie functions
@@ -664,7 +696,8 @@
                 certs: "Certificates",
                 projects: "Projects",
                 contact: "Contact"
-            }
+            },
+            languageToggleText: "Смени на Български"
         };
 
         const bulgarianContent = {
@@ -705,20 +738,23 @@
                 certs: "Сертификати",
                 projects: "Проекти",
                 contact: "Контакт"
-            }
+            },
+            languageToggleText: "Switch to English"
         };
 
         // Language management
         const savedLang = getCookie('language');
         let isEnglish = savedLang ? savedLang === 'en' : true;
-        const languageToggle = document.querySelector('.language-toggle');
+        const languageToggle = document.getElementById('languageToggle');
+        const languageToggleMenu = document.getElementById('languageToggleMenu');
 
         function updateLanguage(isEnglish) {
             const content = isEnglish ? englishContent : bulgarianContent;
-            const toggleText = isEnglish ? "Смени на Български" : "Switch to English";
+            const toggleText = content.languageToggleText;
 
             // Update toggle button text
             languageToggle.textContent = toggleText;
+            languageToggleMenu.textContent = toggleText;
 
             // Update tab names
             document.querySelectorAll('.tab').forEach(tab => {
@@ -781,10 +817,13 @@
         // Initialize language
         updateLanguage(isEnglish);
 
-        languageToggle.addEventListener('click', () => {
+        function toggleLanguage() {
             isEnglish = !isEnglish;
             updateLanguage(isEnglish);
-        });
+        }
+
+        languageToggle.addEventListener('click', toggleLanguage);
+        languageToggleMenu.addEventListener('click', toggleLanguage);
 
         // Settings menu toggle
         document.getElementById('settingsBtn').addEventListener('click', (e) => {
