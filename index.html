@@ -302,19 +302,29 @@
             }
         }
 
-        img.profile {
+        .profile-wrapper {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            object-fit: scale-down;  /* never crops, fits whole image */
-            background-color: transparent; /* keep transparent parts transparent */
-            margin-bottom: 20px;
+            overflow: hidden;           /* enforce circular frame */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent; /* keeps transparent parts transparent */
+        }
+        
+        .profile {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;        /* full image fits */
+            background-color: transparent;
             transition: filter 0.3s ease;
         }
         
-        html:not(.light-theme) img.profile {
-            filter: invert(1); /* only invert in dark theme */
+        html:not(.light-theme) .profile {
+            filter: invert(1);
         }
+        
 
 
         .skills {
@@ -530,7 +540,7 @@
 
     <main class="main-content">
         <div id="about" class="content active">
-            <img src="profile.png" alt="Stefan Stoilov" class="profile">
+            <img src="profile.png" alt="Profile" class="profile">
             <h1>Stefan Nikolaev Stoilov</h1>
             <h2>Cybersecurity Enthusiast, Coder, Future Engineer</h2>
         </div>
