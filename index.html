@@ -306,14 +306,14 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            object-fit: contain;   /* ensures entire image fits inside */
-            background-color: #000; /* fills circle background if image has transparency */
+            object-fit: scale-down;  /* never crops, fits whole image */
+            background-color: transparent; /* keep transparent parts transparent */
             margin-bottom: 20px;
             transition: filter 0.3s ease;
         }
         
         html:not(.light-theme) img.profile {
-            filter: invert(1); /* invert colors in dark theme */
+            filter: invert(1); /* only invert in dark theme */
         }
 
 
