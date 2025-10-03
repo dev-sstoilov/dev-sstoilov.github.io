@@ -306,9 +306,16 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            object-fit: cover;
+            object-fit: contain;   /* ensures entire image fits inside */
+            background-color: #000; /* fills circle background if image has transparency */
             margin-bottom: 20px;
+            transition: filter 0.3s ease;
         }
+        
+        html:not(.light-theme) img.profile {
+            filter: invert(1); /* invert colors in dark theme */
+        }
+
 
         .skills {
             display: flex;
