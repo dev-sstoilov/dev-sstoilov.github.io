@@ -5,25 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stefan Stoilov - Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="profile.png" type="image/png">
     <style>
         :root {
             --primary-color: #10a37f;
             --background-color: #000000;
-            --content-bg: rgba(255, 255, 255, 0.05);
+            --content-bg: #1a1a1a;
             --hover-bg: rgba(255, 255, 255, 0.08);
             --text-color: #ffffff;
             --button-bg: rgba(255, 255, 255, 0.1);
             --button-hover-bg: rgba(255, 255, 255, 0.15);
+            --section-padding: 80px 0;
+            --nav-bg: #000000;
+            --section-scale: 1;
+            --section-spacing: 80px;
+            --transition-speed: 0.2s;
         }
 
-        :root.light-theme {
-            --primary-color: #10a37f;
-            --background-color: #ffffff;
-            --content-bg: rgba(0, 0, 0, 0.05);
-            --hover-bg: rgba(0, 0, 0, 0.08);
-            --text-color: #000000;
-            --button-bg: rgba(0, 0, 0, 0.1);
-            --button-hover-bg: rgba(0, 0, 0, 0.15);
+            :root.light-theme {
+                --primary-color: #10a37f;
+                --background-color: #ffffff;
+                --content-bg: #f5f5f5;
+                --hover-bg: rgba(0, 0, 0, 0.08);
+                --text-color: #000000;
+                --button-bg: rgba(0, 0, 0, 0.1);
+                --button-hover-bg: rgba(0, 0, 0, 0.15);
+                --nav-bg: #ffffff;
+            }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -35,52 +46,248 @@
             color: var(--text-color);
             overflow-x: hidden;
             font-weight: 400;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
         }
 
-        /* Settings Button */
-        .settings-btn {
+        /* Top Navigation Bar - Pure black/white with slide animation and doubled spacing */
+        .top-nav {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: -80px;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            padding: 15px 20%; /* Doubled from 10% to 20% */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--hover-bg);
+            box-sizing: border-box;
+            transition: top 1s ease 0.5s; /* 2x slower with 0.5s delay */
+        }
+
+            .top-nav.loaded {
+                top: 0;
+            }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex: 2;
+            justify-content: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        /* User Profile in Nav */
+        .nav-profile-wrapper {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .nav-profile {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-profile-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #10a37f, #1e90ff, #10a37f, #1e90ff);
+            background-size: 400% 400%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+            animation: weave 8s ease infinite;
+        }
+
+        .nav-profile-wrapper:hover::before {
+            opacity: 1;
+        }
+
+        .nav-profile-wrapper:hover .nav-profile {
+            filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
+        }
+
+        @keyframes weave {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        html:not(.light-theme) .nav-profile {
+            filter: invert(1);
+        }
+
+        /* Navigation Tabs - Always white text */
+        .nav-tabs {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            color: #ffffff !important; /* Always white */
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+            .nav-tab::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background-color: #ffffff;
+                transition: width 0.3s ease;
+            }
+
+            .nav-tab:hover::after {
+                width: 100%;
+            }
+
+        /* Settings Button */
+        .settings-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .settings-btn {
             background: none;
             border: none;
             cursor: pointer;
-            z-index: 1001;
             padding: 8px;
-            border-radius: 50%;
+            border-radius: 4px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .settings-btn:hover {
-            background: var(--hover-bg);
+            .settings-btn:hover {
+                background: var(--hover-bg);
+            }
+
+            .settings-btn img {
+                width: 20px;
+                height: 20px;
+            }
+
+        /* Theme Toggle - Border only */
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
         }
 
-        .settings-btn img {
-            width: 24px;
-            height: 24px;
+            .theme-switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: transparent;
+            transition: var(--transition-speed);
+            border-radius: 34px;
+            border: 2px solid;
         }
 
-        /* Settings Menu */
+        html:not(.light-theme) .theme-slider {
+            border-color: #ffffff;
+        }
+
+        .light-theme .theme-slider {
+            border-color: #000000;
+        }
+
+        .theme-slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-color);
+            transition: var(--transition-speed);
+            border-radius: 50%;
+        }
+
+        input:checked + .theme-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Settings Menu - No delay */
         .settings-menu {
-            position: fixed;
-            top: 60px;
-            right: 20px;
-            background: var(--content-bg);
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--nav-bg);
             border-radius: 8px;
             padding: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             display: none;
             z-index: 1000;
-            min-width: 160px;
-            backdrop-filter: blur(10px);
+            min-width: 180px;
             border: 1px solid var(--hover-bg);
+            margin-top: 5px;
         }
 
-        .settings-menu.active {
-            display: block;
-            animation: fadeIn 0.2s ease-in-out;
-        }
+            .settings-menu.active {
+                display: block;
+                animation: fadeIn 0.3s ease; /* No delay, faster animation */
+            }
 
         .settings-menu-item {
             display: flex;
@@ -91,130 +298,32 @@
             font-size: 0.9rem;
         }
 
-        .theme-switch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 20px;
+        /* Main Content with dynamic spacing */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 100px 20px 50px;
+            transition: padding 0.5s ease;
         }
 
-        .theme-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .theme-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--button-bg);
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .theme-slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 2px;
-            bottom: 2px;
-            background-color: var(--text-color);
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .theme-slider {
-            background-color: var(--primary-color);
-        }
-
-        input:checked + .theme-slider:before {
-            transform: translateX(20px);
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 30%;
-            transform: translateY(-50%);
-            width: 260px;
-            padding: 20px;
-        }
-
-        .tabs {
+        .section {
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-        }
-
-        .tab {
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-color);
-            background: transparent;
-            position: relative;
-            display: flex;
-            align-items: center;
-            border: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .tab::after {
-            content: '›';
-            position: absolute;
-            right: 20px;
-            opacity: 0.8;
-        }
-
-        .tab:hover {
-            background: var(--hover-bg) !important;
-        }
-
-        .tab.active {
-            background: var(--content-bg) !important;
-            font-weight: 500;
-        }
-
-        /* Main Content */
-        .main-content {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 800px;
-            padding: 40px;
-            display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        .content {
-            display: none;
-            width: 100%;
-            background: var(--content-bg);
-            border-radius: 16px;
-            padding: 40px;
-            animation: fadeIn 0.3s ease-in-out;
-            transition: background-color 0.3s ease;
-        }
-
-        .content.active {
-            display: block;
+            padding: var(--section-spacing) 0;
+            text-align: center;
+            scroll-margin-top: 80px;
+            transform: scale(var(--section-scale));
+            transition: transform 0.5s ease, padding 0.5s ease;
+            transform-origin: center center;
         }
 
         /* Text Elements */
         h1, h2, h3, p, .skill {
             font-family: 'Inter', sans-serif;
-            transition: color 0.3s ease;
+            transition: color var(--transition-speed) ease;
         }
 
         h1 {
@@ -237,101 +346,65 @@
             margin: 25px 0 15px;
         }
 
-        /* Certificate Grid */
-        .certificates {
+        /* Profile Section */
+        .profile-wrapper {
+            width: 200px;
+            height: 200px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            transition: all 0.5s ease;
         }
 
-        .certificates img {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .certificates img:hover {
-            transform: scale(1.1);
+        .profile {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: all 0.5s ease;
+            position: relative;
             z-index: 2;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            filter: none;
         }
 
-        /* Certificate Overlay */
-        .overlay {
-            position: fixed;
+        .profile-wrapper::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeInOverlay 0.3s ease-in-out;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #10a37f, #1e90ff, #10a37f, #1e90ff);
+            background-size: 400% 400%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+            animation: weave 8s ease infinite;
+            mix-blend-mode: overlay;
         }
 
-        .overlay img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 20px;
-            object-fit: contain;
-            animation: fadeIn 0.3s ease-in-out;
+        .profile-wrapper:hover::before {
+            opacity: 0.8;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .profile-wrapper:hover .profile {
+            filter: drop-shadow(0 0 5px rgba(16, 163, 127, 0.5));
         }
 
-        @keyframes fadeInOverlay {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .profile-wrapper {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            overflow: hidden;           /* enforce circular frame */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: transparent; /* keeps transparent parts transparent */
-        }
-        
-        .profile {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;        /* full image fits */
-            background-color: transparent;
-            transition: filter 0.3s ease;
-        }
-        
         html:not(.light-theme) .profile {
             filter: invert(1);
         }
-        
 
-
+        /* Skills */
         .skills {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             margin: 20px 0;
+            justify-content: center;
         }
 
         .skill {
@@ -343,98 +416,76 @@
             transition: background 0.3s ease;
         }
 
-        /* Language Toggle */
-        .language-toggle {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 8px 16px;
-            background: var(--button-bg);
-            color: var(--text-color);
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            z-index: 1000;
+        /* Certificate Grid */
+        .certificates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
         }
 
-        .language-toggle:hover {
-            background: var(--button-hover-bg);
-            transform: translateX(-50%) scale(1.05);
-        }
+            .certificates img {
+                width: 90px;
+                height: 90px;
+                object-fit: cover;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+            }
 
-        /* Mobile Navigation */
-        .mobile-nav {
-            display: none;
+                .certificates img:hover {
+                    transform: scale(1.1);
+                    z-index: 2;
+                    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+                }
+
+        /* Certificate Overlay - No delay */
+        .overlay {
             position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
-            width: 100%;
-            background: var(--content-bg);
-            padding: 15px 0;
-            backdrop-filter: blur(10px);
-            border-top: 1px solid var(--hover-bg);
-            z-index: 999;
-        }
-
-        .mobile-tab-names {
-            display: flex;
-            justify-content: space-around;
-            padding: 0 10px 15px;
-            overflow-x: auto;
-            scrollbar-width: none; /* Firefox */
-        }
-
-        .mobile-tab-names::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
-
-        .mobile-tab-name {
-            font-size: 0.85rem;
-            padding: 5px 10px;
-            white-space: nowrap;
-            opacity: 0.7;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-tab-name.active {
-            opacity: 1;
-            font-weight: 500;
-            color: var(--primary-color);
-        }
-
-        .mobile-nav-buttons {
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
             justify-content: center;
-            gap: 30px;
-        }
-
-        .mobile-nav-btn {
-            background: var(--button-bg);
-            color: var(--text-color);
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: fadeInOverlay 0.3s ease; /* No delay */
         }
 
-        .mobile-nav-btn:hover {
-            background: var(--button-hover-bg);
-            transform: scale(1.05);
+            .overlay img {
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 20px;
+                object-fit: contain;
+                animation: fadeIn 0.3s ease; /* No delay */
+            }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
-        /* Language toggle in settings menu */
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Language Toggle in Settings Menu */
         .language-toggle-menu {
-            display: none;
             width: 100%;
             padding: 8px 16px;
             background: var(--button-bg);
@@ -449,103 +500,268 @@
             margin-top: 10px;
         }
 
-        .language-toggle-menu:hover {
-            background: var(--button-hover-bg);
+            .language-toggle-menu:hover {
+                background: var(--button-hover-bg);
+            }
+
+        /* Mobile Menu - No delay */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .mobile-menu-btn img {
+                width: 24px;
+                height: 24px;
+                transition: filter var(--transition-speed) ease;
+            }
+
+        html:not(.light-theme) .mobile-menu-btn img {
+            filter: invert(1);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 999;
+            animation: slideDown 0.3s ease; /* No delay, faster animation */
+            border-top: 1px solid var(--hover-bg);
+        }
+
+            .mobile-menu.active {
+                display: block;
+            }
+
+        .mobile-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mobile-tab {
+            background: none;
+            border: none;
+            color: #ffffff !important; /* Always white */
+            font-size: 1.1rem;
+            text-align: left;
+            padding: 10px 0;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+            .mobile-tab::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background-color: #ffffff;
+                transition: width 0.3s ease;
+            }
+
+            .mobile-tab:hover::after {
+                width: 100%;
+            }
+
+        .mobile-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--hover-bg);
+        }
+
+        /* Mobile Theme Toggle - Hidden by default, shown when menu is active */
+        .mobile-theme-toggle {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .mobile-theme-toggle.active {
+                display: flex;
+            }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
-            .sidebar {
+            .top-nav {
+                padding: 10px 20%; /* Doubled from 10% to 20% */
+            }
+
+            .nav-center, .nav-right .theme-switch, .nav-right .settings-container {
                 display: none;
             }
-            
-            .mobile-nav {
+
+            .mobile-menu-btn {
                 display: block;
             }
-            
+
+            .mobile-theme-toggle {
+                display: none;
+            }
+
+                .mobile-theme-toggle.active {
+                    display: flex;
+                }
+
+            .section {
+                min-height: 70vh;
+                padding: 60px 0;
+            }
+
             .main-content {
-                top: 45%;
-                padding: 20px;
+                padding-top: 80px;
             }
-            
-            .content {
-                padding: 25px;
+
+            h1 {
+                font-size: 2rem;
             }
-            
-            .language-toggle {
-                display: none;
+
+            h2 {
+                font-size: 1.2rem;
             }
-            
-            .language-toggle-menu {
-                display: block;
+
+            .profile-wrapper {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .mobile-menu {
+                top: 60px;
+            }
+
+            .section {
+                scroll-margin-top: 60px;
             }
         }
 
         @media (max-width: 480px) {
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
-            
+
             h2 {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
-            
-            .mobile-tab-name {
-                font-size: 0.75rem;
-                padding: 5px;
+
+            .nav-profile-wrapper {
+                width: 35px;
+                height: 35px;
             }
-            
-            .mobile-nav-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
-            }
-            
-            .settings-menu {
-                top: 50px;
-                right: 15px;
-                min-width: 180px;
+
+            .top-nav {
+                padding: 10px 10%; /* Doubled from 5% to 10% */
             }
         }
     </style>
 </head>
 <body>
-    <!-- Settings Button -->
-    <button class="settings-btn" id="settingsBtn">
-        <img id="settingsIcon" src="settings-light.png" alt="Settings">
-    </button>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <div class="nav-profile-wrapper">
+                <img src="profile.png" alt="Profile" class="nav-profile">
+            </div>
+        </div>
 
-    <!-- Settings Menu -->
-    <div class="settings-menu" id="settingsMenu">
-        <div class="settings-menu-item">
-            <span id="themeText">Change to dark theme</span>
+        <div class="nav-center">
+            <div class="nav-tabs">
+                <button class="nav-tab" data-section="about">About</button>
+                <button class="nav-tab" data-section="skills">Skills</button>
+                <button class="nav-tab" data-section="services">Services</button>
+                <button class="nav-tab" data-section="certs">Certificates</button>
+                <button class="nav-tab" data-section="projects">Projects</button>
+                <button class="nav-tab" data-section="contact">Contact</button>
+            </div>
+        </div>
+
+        <div class="nav-right">
             <label class="theme-switch">
                 <input type="checkbox" id="themeCheckbox">
                 <span class="theme-slider"></span>
             </label>
-        </div>
-        <button class="language-toggle-menu" id="languageToggleMenu">Смени на Български</button>
-    </div>
 
-    <nav class="sidebar">
-        <div class="tabs">
-            <button class="tab active" data-tab="about">About</button>
-            <button class="tab" data-tab="skills">Skills</button>
-            <button class="tab" data-tab="services">Services</button>
-            <button class="tab" data-tab="certs">Certificates</button>
-            <button class="tab" data-tab="projects">Projects</button>
-            <button class="tab" data-tab="contact">Contact</button>
+            <div class="settings-container">
+                <button class="settings-btn" id="settingsBtn">
+                    <img id="settingsIcon" src="settings-light.png" alt="Settings">
+                </button>
+
+                <!-- Settings Menu -->
+                <div class="settings-menu" id="settingsMenu">
+                    <div class="settings-menu-item">
+                        <span id="themeText">Change to dark theme</span>
+                    </div>
+                    <button class="language-toggle-menu" id="languageToggleMenu">Смени на Български</button>
+                </div>
+            </div>
+
+            <!-- Mobile Theme Toggle (shown when menu is active) -->
+            <div class="mobile-theme-toggle" id="mobileThemeToggle">
+                <label class="theme-switch">
+                    <input type="checkbox" id="mobileThemeCheckbox">
+                    <span class="theme-slider"></span>
+                </label>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <img src="bar.png" alt="Menu">
+            </button>
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-tabs">
+            <button class="mobile-tab" data-section="about">About</button>
+            <button class="mobile-tab" data-section="skills">Skills</button>
+            <button class="mobile-tab" data-section="services">Services</button>
+            <button class="mobile-tab" data-section="certs">Certificates</button>
+            <button class="mobile-tab" data-section="projects">Projects</button>
+            <button class="mobile-tab" data-section="contact">Contact</button>
+        </div>
+        <div class="mobile-settings">
+            <button class="language-toggle-menu" id="mobileLanguageToggleMenu">Смени на Български</button>
+        </div>
+    </div>
+
     <main class="main-content">
-        <div id="about" class="content active">
-            <img src="profile.png" alt="Profile" class="profile">
+        <section id="about" class="section">
+            <div class="profile-wrapper">
+                <img src="profile.png" alt="Profile" class="profile">
+            </div>
             <h1>Stefan Nikolaev Stoilov</h1>
             <h2>Cybersecurity Enthusiast, Coder, Future Engineer</h2>
-        </div>
+        </section>
 
-        <div id="skills" class="content">
+        <section id="skills" class="section">
             <h3>Technical Skills</h3>
             <div class="skills">
                 <div class="skill">Coding</div>
@@ -560,37 +776,37 @@
                 <div class="skill">JavaScript</div>
                 <div class="skill">Java (a bit)</div>
             </div>
-        </div>
+        </section>
 
-        <div id="services" class="content">
+        <section id="services" class="section">
             <h3>My Services</h3>
             <div class="skills">
                 <div class="skill">Making custom programs per user requirements</div>
                 <div class="skill">Programming lessons</div>
                 <div class="skill">Robotics lessons</div>
             </div>
-        </div>
+        </section>
 
-        <div id="certs" class="content">
+        <section id="certs" class="section">
             <h3>Certificates</h3>
             <div class="certificates" id="certGallery">
                 <!-- Certificates will be populated by JavaScript -->
             </div>
-        </div>
+        </section>
 
-        <div id="projects" class="content">
+        <section id="projects" class="section">
             <h3>My Current Projects</h3>
             <div class="certificates">
                 <img src="https://github.com/dev-sstoilov/dev-sstoilov.github.io/blob/main/unnamed.jpg?raw=true"
                      alt="AI Robot Project"
                      style="width: 200px; height: 150px; object-fit: cover;">
             </div>
-            <p style="margin-top: 20px; opacity: 0.8;">
+            <p style="margin-top: 20px; opacity: 0.8; max-width: 600px;">
                 <span class="project-description">I am working on putting a locally hosted GPT (AI) I made in control of this robot using a Raspberry Pi Zero on-board computer. It will be capable of replying to your speech with its voice and execute movements based on it.</span>
             </p>
-        </div>
+        </section>
 
-        <div id="contact" class="content">
+        <section id="contact" class="section">
             <h3>Contact Information</h3>
             <p>
                 Email: <a href="mailto:sstoilov777@gmail.com"
@@ -601,64 +817,47 @@
                 </a>
             </p>
             <p>Discord: _thedeveloperbg_</p>
-        </div>
+        </section>
     </main>
-
-    <!-- Mobile Navigation -->
-    <div class="mobile-nav">
-        <div class="mobile-tab-names" id="mobileTabNames">
-            <span class="mobile-tab-name active" data-tab="about">About</span>
-            <span class="mobile-tab-name" data-tab="skills">Skills</span>
-            <span class="mobile-tab-name" data-tab="services">Services</span>
-            <span class="mobile-tab-name" data-tab="certs">Certificates</span>
-            <span class="mobile-tab-name" data-tab="projects">Projects</span>
-            <span class="mobile-tab-name" data-tab="contact">Contact</span>
-        </div>
-        <div class="mobile-nav-buttons">
-            <button class="mobile-nav-btn" id="prevTab">↑</button>
-            <button class="mobile-nav-btn" id="nextTab">↓</button>
-        </div>
-    </div>
-
-    <!-- Language toggle button (Desktop only) -->
-    <button class="language-toggle" id="languageToggle">Смени на Български</button>
 
     <script>
         // Cookie functions
         function setCookie(name, value, days) {
-            const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
         }
 
         function getCookie(name) {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.split('=');
-                if (cookieName.trim() === name) return cookieValue;
-            }
-            return null;
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName.trim() === name) return cookieValue;
+        }
+        return null;
         }
 
         // Theme management
         function updateThemeIcon() {
-            const isLight = document.documentElement.classList.contains('light-theme');
-            document.getElementById('settingsIcon').src = isLight ?
-                'settings-light.png' : 'settings-dark.png';
+        const isLight = document.documentElement.classList.contains('light-theme');
+        document.getElementById('settingsIcon').src = isLight ?
+        'settings-light.png' : 'settings-dark.png';
         }
 
         function applyTheme(isLight) {
-            const themeText = document.getElementById('themeText');
-            if (isLight) {
-                document.documentElement.classList.add('light-theme');
-                document.getElementById('themeCheckbox').checked = true;
-                themeText.textContent = 'Change to dark theme';
-            } else {
-                document.documentElement.classList.remove('light-theme');
-                document.getElementById('themeCheckbox').checked = false;
-                themeText.textContent = 'Change to light theme';
-            }
-            updateThemeIcon();
+        const themeText = document.getElementById('themeText');
+        if (isLight) {
+        document.documentElement.classList.add('light-theme');
+        document.getElementById('themeCheckbox').checked = true;
+        document.getElementById('mobileThemeCheckbox').checked = true;
+        themeText.textContent = 'Change to dark theme';
+        } else {
+        document.documentElement.classList.remove('light-theme');
+        document.getElementById('themeCheckbox').checked = false;
+        document.getElementById('mobileThemeCheckbox').checked = false;
+        themeText.textContent = 'Change to light theme';
+        }
+        updateThemeIcon();
         }
 
         // Initial theme setup
@@ -669,287 +868,379 @@
 
         // Theme toggle
         document.getElementById('themeCheckbox').addEventListener('change', (e) => {
-            const isLight = e.target.checked;
-            applyTheme(isLight);
-            setCookie('theme', isLight ? 'light' : 'dark', 30);
+        const isLight = e.target.checked;
+        applyTheme(isLight);
+        setCookie('theme', isLight ? 'light' : 'dark', 30);
+        });
+
+        document.getElementById('mobileThemeCheckbox').addEventListener('change', (e) => {
+        const isLight = e.target.checked;
+        applyTheme(isLight);
+        setCookie('theme', isLight ? 'light' : 'dark', 30);
         });
 
         // Language content
         const englishContent = {
-            about: {
-                title: "Stefan Nikolaev Stoilov",
-                subtitle: "Cybersecurity Enthusiast, Coder, Future Engineer"
-            },
-            skills: {
-                technicalSkills: "Technical Skills",
-                programmingLanguages: "Programming Languages",
-                skills: ["Coding", "Cybersecurity", "Building Robots"],
-                languages: ["Python", "HTML", "JavaScript", "Java (a bit)"]
-            },
-            services: {
-                title: "My Services",
-                services: [
-                    "Making custom programs per user requirements",
-                    "Programming lessons",
-                    "Robotics lessons"
-                ]
-            },
-            certs: {
-                title: "Certificates"
-            },
-            projects: {
-                title: "My Current Projects",
-                sampleText: "I am working on putting a locally hosted GPT (AI) I made in control of this robot using a Raspberry Pi Zero on-board computer. It will be capable of replying to your speech with its voice and execute movements based on it."
-            },
-            contact: {
-                title: "Contact Information",
-                email: "Email: ",
-                discord: "Discord: "
-            },
-            tabs: {
-                about: "About",
-                skills: "Skills",
-                services: "Services",
-                certs: "Certificates",
-                projects: "Projects",
-                contact: "Contact"
-            },
-            languageToggleText: "Смени на Български"
+        about: {
+        title: "Stefan Nikolaev Stoilov",
+        subtitle: "Cybersecurity Enthusiast, Coder, Future Engineer"
+        },
+        skills: {
+        technicalSkills: "Technical Skills",
+        programmingLanguages: "Programming Languages",
+        skills: ["Coding", "Cybersecurity", "Building Robots"],
+        languages: ["Python", "HTML", "JavaScript", "Java (a bit)"]
+        },
+        services: {
+        title: "My Services",
+        services: [
+        "Making custom programs per user requirements",
+        "Programming lessons",
+        "Robotics lessons"
+        ]
+        },
+        certs: {
+        title: "Certificates"
+        },
+        projects: {
+        title: "My Current Projects",
+        sampleText: "I am working on putting a locally hosted GPT (AI) I made in control of this robot using a Raspberry Pi Zero on-board computer. It will be capable of replying to your speech with its voice and execute movements based on it."
+        },
+        contact: {
+        title: "Contact Information",
+        email: "Email: ",
+        discord: "Discord: "
+        },
+        tabs: {
+        about: "About",
+        skills: "Skills",
+        services: "Services",
+        certs: "Certificates",
+        projects: "Projects",
+        contact: "Contact"
+        },
+        languageToggleText: "Смени на Български"
         };
 
         const bulgarianContent = {
-            about: {
-                title: "Стефан Николаев Стоилов",
-                subtitle: "Ентусиаст по киберсигурност, програмист, бъдещ инженер"
-            },
-            skills: {
-                technicalSkills: "Технически Умения",
-                programmingLanguages: "Програмни Езици",
-                skills: ["Програмиране", "Киберсигурност", "Конструиране/дизайн на роботи"],
-                languages: ["Python", "HTML", "JavaScript", "Java (малко)"]
-            },
-            services: {
-                title: "Моите Услуги",
-                services: [
-                    "Създаване на програми по поръчка",
-                    "Уроци по програмиране",
-                    "Уроци по роботика"
-                ]
-            },
-            certs: {
-                title: "Сертификати"
-            },
-            projects: {
-                title: "Текущи Проекти",
-                sampleText: "В момента работя върху интеграция на локално хостван GPT модел (Изкуствен Интелект), който създадох за управление на този робот с помощта на Raspberry Pi Zero платков компютър. Роботът ще може да отговаря на това което чува със свой глас и физически да прави движения според разговора."
-            },
-            contact: {
-                title: "Контактна Информация",
-                email: "Имейл: ",
-                discord: "Дискорд: "
-            },
-            tabs: {
-                about: "За Мен",
-                skills: "Умения",
-                services: "Услуги",
-                certs: "Сертификати",
-                projects: "Проекти",
-                contact: "Контакт"
-            },
-            languageToggleText: "Switch to English"
+        about: {
+        title: "Стефан Николаев Стоилов",
+        subtitle: "Ентусиаст по киберсигурност, програмист, бъдещ инженер"
+        },
+        skills: {
+        technicalSkills: "Технически Умения",
+        programmingLanguages: "Програмни Езици",
+        skills: ["Програмиране", "Киберсигурност", "Конструиране/дизайн на роботи"],
+        languages: ["Python", "HTML", "JavaScript", "Java (малко)"]
+        },
+        services: {
+        title: "Моите Услуги",
+        services: [
+        "Създаване на програми по поръчка",
+        "Уроци по програмиране",
+        "Уроци по роботика"
+        ]
+        },
+        certs: {
+        title: "Сертификати"
+        },
+        projects: {
+        title: "Текущи Проекти",
+        sampleText: "В момента работя върху интеграция на локално хостван GPT модел (Изкуствен Интелект), който създадох за управление на този робот с помощта на Raspberry Pi Zero платков компютър. Роботът ще може да отговаря на това което чува със свой глас и физически да прави движения според разговора."
+        },
+        contact: {
+        title: "Контактна Информация",
+        email: "Имейл: ",
+        discord: "Дискорд: "
+        },
+        tabs: {
+        about: "За Мен",
+        skills: "Умения",
+        services: "Услуги",
+        certs: "Сертификати",
+        projects: "Проекти",
+        contact: "Контакт"
+        },
+        languageToggleText: "Switch to English"
         };
 
         // Language management
         const savedLang = getCookie('language');
         let isEnglish = savedLang ? savedLang === 'en' : true;
-        const languageToggle = document.getElementById('languageToggle');
         const languageToggleMenu = document.getElementById('languageToggleMenu');
+        const mobileLanguageToggleMenu = document.getElementById('mobileLanguageToggleMenu');
 
         function updateLanguage(isEnglish) {
-            const content = isEnglish ? englishContent : bulgarianContent;
-            const toggleText = content.languageToggleText;
+        const content = isEnglish ? englishContent : bulgarianContent;
+        const toggleText = content.languageToggleText;
 
-            // Update toggle button text
-            languageToggle.textContent = toggleText;
-            languageToggleMenu.textContent = toggleText;
+        // Update toggle button text
+        languageToggleMenu.textContent = toggleText;
+        mobileLanguageToggleMenu.textContent = toggleText;
 
-            // Update tab names
-            document.querySelectorAll('.tab').forEach(tab => {
-                const tabId = tab.dataset.tab;
-                tab.textContent = content.tabs[tabId];
-            });
+        // Update tab names
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+        const tabId = tab.dataset.section;
+        tab.textContent = content.tabs[tabId];
+        });
 
-            // Update mobile tab names
-            document.querySelectorAll('.mobile-tab-name').forEach(tab => {
-                const tabId = tab.dataset.tab;
-                tab.textContent = content.tabs[tabId];
-            });
+        // Update mobile tab names
+        document.querySelectorAll('.mobile-tab').forEach(tab => {
+        const tabId = tab.dataset.section;
+        tab.textContent = content.tabs[tabId];
+        });
 
-            // Update About section
-            const aboutSection = document.getElementById('about');
-            aboutSection.querySelector('h1').textContent = content.about.title;
-            aboutSection.querySelector('h2').textContent = content.about.subtitle;
+        // Update About section
+        const aboutSection = document.getElementById('about');
+        aboutSection.querySelector('h1').textContent = content.about.title;
+        aboutSection.querySelector('h2').textContent = content.about.subtitle;
 
-            // Update Skills section
-            const skillsSection = document.getElementById('skills');
-            skillsSection.querySelector('h3:nth-of-type(1)').textContent = content.skills.technicalSkills;
-            skillsSection.querySelector('h3:nth-of-type(2)').textContent = content.skills.programmingLanguages;
-            const skillElements = skillsSection.querySelectorAll('.skill');
-            content.skills.skills.concat(content.skills.languages).forEach((skill, index) => {
-                skillElements[index].textContent = skill;
-            });
+        // Update Skills section
+        const skillsSection = document.getElementById('skills');
+        skillsSection.querySelector('h3:nth-of-type(1)').textContent = content.skills.technicalSkills;
+        skillsSection.querySelector('h3:nth-of-type(2)').textContent = content.skills.programmingLanguages;
+        const skillElements = skillsSection.querySelectorAll('.skill');
+        content.skills.skills.concat(content.skills.languages).forEach((skill, index) => {
+        skillElements[index].textContent = skill;
+        });
 
-            // Update Services section
-            const servicesSection = document.getElementById('services');
-            servicesSection.querySelector('h3').textContent = content.services.title;
-            const serviceElements = servicesSection.querySelectorAll('.skill');
-            content.services.services.forEach((service, index) => {
-                serviceElements[index].textContent = service;
-            });
+        // Update Services section
+        const servicesSection = document.getElementById('services');
+        servicesSection.querySelector('h3').textContent = content.services.title;
+        const serviceElements = servicesSection.querySelectorAll('.skill');
+        content.services.services.forEach((service, index) => {
+        serviceElements[index].textContent = service;
+        });
 
-            // Update Certificates section
-            const certsSection = document.getElementById('certs');
-            certsSection.querySelector('h3').textContent = content.certs.title;
+        // Update Certificates section
+        const certsSection = document.getElementById('certs');
+        certsSection.querySelector('h3').textContent = content.certs.title;
 
-            // Update Projects section
-            const projectsSection = document.getElementById('projects');
-            projectsSection.querySelector('h3').textContent = content.projects.title;
-            projectsSection.querySelector('.project-description').textContent = content.projects.sampleText;
+        // Update Projects section
+        const projectsSection = document.getElementById('projects');
+        projectsSection.querySelector('h3').textContent = content.projects.title;
+        projectsSection.querySelector('.project-description').textContent = content.projects.sampleText;
 
-            // Update Contact section
-            const contactSection = document.getElementById('contact');
-            contactSection.querySelector('h3').textContent = content.contact.title;
-            contactSection.querySelector('p:nth-of-type(1)').innerHTML = `
-                    ${content.contact.email} <a href="mailto:sstoilov777@gmail.com"
-                    style="color: var(--primary-color);
-                           text-decoration: none;
-                           font-weight: 500;">
-                    sstoilov777@gmail.com</a>`;
-            contactSection.querySelector('p:nth-of-type(2)').innerHTML = `
-                    ${content.contact.discord} <i>_thedeveloperbg_<i>`;
+        // Update Contact section
+        const contactSection = document.getElementById('contact');
+        contactSection.querySelector('h3').textContent = content.contact.title;
+        contactSection.querySelector('p:nth-of-type(1)').innerHTML = `
+        ${content.contact.email} <a href="mailto:sstoilov777@gmail.com"
+        style="color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;">
+        sstoilov777@gmail.com</a>`;
+        contactSection.querySelector('p:nth-of-type(2)').innerHTML = `
+        ${content.contact.discord} <i>_thedeveloperbg_<i>`;
 
-            setCookie('language', isEnglish ? 'en' : 'bg', 30);
+        setCookie('language', isEnglish ? 'en' : 'bg', 30);
         }
 
         // Initialize language
         updateLanguage(isEnglish);
 
         function toggleLanguage() {
-            isEnglish = !isEnglish;
-            updateLanguage(isEnglish);
+        isEnglish = !isEnglish;
+        updateLanguage(isEnglish);
         }
 
-        languageToggle.addEventListener('click', toggleLanguage);
         languageToggleMenu.addEventListener('click', toggleLanguage);
+        mobileLanguageToggleMenu.addEventListener('click', toggleLanguage);
 
         // Settings menu toggle
         document.getElementById('settingsBtn').addEventListener('click', (e) => {
-            const menu = document.getElementById('settingsMenu');
-            menu.classList.toggle('active');
-            e.stopPropagation();
+        const menu = document.getElementById('settingsMenu');
+        menu.classList.toggle('active');
+        e.stopPropagation();
         });
 
-        // Close menu when clicking outside
+        // Mobile menu toggle with theme toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', (e) => {
+        const menu = document.getElementById('mobileMenu');
+        const themeToggle = document.getElementById('mobileThemeToggle');
+        const isActive = menu.classList.toggle('active');
+
+        // Show/hide mobile theme toggle
+        if (isActive) {
+        themeToggle.classList.add('active');
+        } else {
+        themeToggle.classList.remove('active');
+        }
+
+        e.stopPropagation();
+        });
+
+        // Close menus when clicking outside
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.settings-menu') && !e.target.closest('#settingsBtn')) {
-                document.getElementById('settingsMenu').classList.remove('active');
-            }
+        if (!e.target.closest('.settings-menu') && !e.target.closest('#settingsBtn')) {
+        document.getElementById('settingsMenu').classList.remove('active');
+        }
+
+        if (!e.target.closest('.mobile-menu') && !e.target.closest('#mobileMenuBtn')) {
+        document.getElementById('mobileMenu').classList.remove('active');
+        document.getElementById('mobileThemeToggle').classList.remove('active');
+        }
         });
 
         // Certificate loading
         const certGallery = document.getElementById("certGallery");
         const certImages = [
-            "https://raw.githubusercontent.com/dev-sstoilov/dev-sstoilov.github.io/refs/heads/main/CS50P.png",
-            "https://raw.githubusercontent.com/dev-sstoilov/dev-sstoilov.github.io/refs/heads/main/CS50AI.png",
-            "https://raw.githubusercontent.com/dev-sstoilov/dev-sstoilov.github.io/refs/heads/main/CS50%20Cybersecurity.png",
+        "https://raw.githubusercontent.com/dev-sstoilov/dev-sstoilov.github.io/refs/heads/main/CS50P.png",
+        "https://raw.githubusercontent.com/dev-sstoilov/dev-sstoilov.github.io/refs/heads/main/CS50AI.png",
+        "https://raw.githubusercontent.com/dev-sstoilov/dev-sstoilov.github.io/refs/heads/main/CS50%20Cybersecurity.png",
         ];
 
         if (certGallery) {
-            certImages.forEach(url => {
-                let imgElem = document.createElement("img");
-                imgElem.src = url;
-                imgElem.alt = "Certificate";
-                imgElem.onclick = () => openCert(imgElem.src);
-                certGallery.appendChild(imgElem);
-            });
+        certImages.forEach(url => {
+        let imgElem = document.createElement("img");
+        imgElem.src = url;
+        imgElem.alt = "Certificate";
+        imgElem.onclick = () => openCert(imgElem.src);
+        certGallery.appendChild(imgElem);
+        });
         }
 
-        // Tab switching logic
-        const tabs = ['about', 'skills', 'services', 'certs', 'projects', 'contact'];
-        let currentTabIndex = 0;
+        // Section navigation logic
+        const sections = ['about', 'skills', 'services', 'certs', 'projects', 'contact'];
+        let isScrolling = false;
+        let scrollTimeout;
 
-        function switchTab(tabId) {
-            // Remove active class from all tabs
-            document.querySelectorAll('.tab').forEach(t => {
-                t.classList.remove('active');
-            });
-            
-            // Remove active class from all mobile tab names
-            document.querySelectorAll('.mobile-tab-name').forEach(t => {
-                t.classList.remove('active');
-            });
+        function scrollToSection(sectionId, instant = false) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+        // Set smooth or instant scroll
+        const behavior = instant ? 'auto' : 'smooth';
 
-            // Hide all content
-            document.querySelectorAll('.content').forEach(c => {
-                c.classList.remove('active');
-            });
+        // Scroll to section
+        section.scrollIntoView({
+        behavior: behavior,
+        block: 'center'
+        });
 
-            // Activate clicked tab and content
-            const tabButton = document.querySelector(`.tab[data-tab="${tabId}"]`);
-            if (tabButton) tabButton.classList.add('active');
-            
-            // Activate mobile tab name
-            const mobileTab = document.querySelector(`.mobile-tab-name[data-tab="${tabId}"]`);
-            if (mobileTab) mobileTab.classList.add('active');
-            
-            document.getElementById(tabId).classList.add('active');
-            
-            // Update current tab index
-            currentTabIndex = tabs.indexOf(tabId);
+        // Close mobile menu if open
+        document.getElementById('mobileMenu').classList.remove('active');
+        document.getElementById('mobileThemeToggle').classList.remove('active');
+        }
         }
 
-        // Initialize tabs
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                switchTab(this.dataset.tab);
-            });
+        // Initialize navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+        scrollToSection(this.dataset.section);
         });
-        
-        // Mobile tab navigation
-        document.querySelectorAll('.mobile-tab-name').forEach(tab => {
-            tab.addEventListener('click', function() {
-                switchTab(this.dataset.tab);
-            });
-        });
-        
-        // Previous/Next buttons
-        document.getElementById('prevTab').addEventListener('click', () => {
-            currentTabIndex = (currentTabIndex - 1 + tabs.length) % tabs.length;
-            switchTab(tabs[currentTabIndex]);
-        });
-        
-        document.getElementById('nextTab').addEventListener('click', () => {
-            currentTabIndex = (currentTabIndex + 1) % tabs.length;
-            switchTab(tabs[currentTabIndex]);
         });
 
-        // Certificate overlay with animation
+        // Mobile navigation
+        document.querySelectorAll('.mobile-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+        scrollToSection(this.dataset.section);
+        });
+        });
+
+        // Calculate maximum possible scale for a section without overflow - MAXIMUM ZOOM
+        function calculateMaxScale(section) {
+        const navHeight = document.querySelector('.top-nav').offsetHeight;
+        const windowHeight = window.innerHeight - navHeight - 20; // Minimal padding
+        const windowWidth = window.innerWidth - 20; // Minimal padding
+
+        const sectionHeight = section.scrollHeight;
+        const sectionWidth = section.scrollWidth;
+
+        // Calculate maximum scale that fits both dimensions - MAXIMUM POSSIBLE
+        const maxScaleHeight = windowHeight / sectionHeight;
+        const maxScaleWidth = windowWidth / sectionWidth;
+
+        // Use the smaller scale to ensure no overflow in either dimension
+        // Remove the cap of 3 to allow maximum possible zoom
+        return Math.min(maxScaleHeight, maxScaleWidth) * 0.95; // 95% to ensure no overflow
+        }
+
+        // Scroll-based animations with MAXIMUM zooming
+        function updateSectionsOnScroll() {
+        const sections = document.querySelectorAll('.section');
+        const navHeight = document.querySelector('.top-nav').offsetHeight;
+        const windowHeight = window.innerHeight;
+        const scrollY = window.scrollY;
+
+        // Find the section that's currently in the center of the viewport
+        let activeSection = null;
+        let maxVisibility = 0;
+
+        sections.forEach(section => {
+        const sectionTop = section.offsetTop - navHeight;
+        const sectionHeight = section.offsetHeight;
+        const sectionCenter = sectionTop + sectionHeight / 2;
+        const viewportCenter = scrollY + windowHeight / 2;
+
+        // Calculate how close the section center is to the viewport center
+        const distanceFromCenter = Math.abs(sectionCenter - viewportCenter);
+        const visibility = Math.max(0, 1 - distanceFromCenter / (windowHeight / 2));
+
+        if (visibility > maxVisibility) {
+        maxVisibility = visibility;
+        activeSection = section;
+        }
+
+        // Calculate scale based on visibility, using MAXIMUM possible scale
+        const maxScale = calculateMaxScale(section);
+        // Use aggressive scaling - when centered, use maximum scale
+        const scale = 1 + (visibility * (maxScale - 1));
+        section.style.setProperty('--section-scale', Math.max(scale, 1));
+        });
+
+        // Update section spacing based on scroll state
+        const isScrolling = scrollY > 0;
+        const newSpacing = isScrolling ? '20px' : '80px';
+        document.documentElement.style.setProperty('--section-spacing', newSpacing);
+
+        // Update main content padding
+        const mainContent = document.querySelector('.main-content');
+        mainContent.style.paddingTop = isScrolling ? '60px' : '100px';
+        }
+
+        // Throttle scroll events
+        function throttle(func, limit) {
+        let inThrottle;
+        return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+        func.apply(context, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+        }
+        }
+        }
+
+        // Initialize scroll-based animations
+        window.addEventListener('scroll', throttle(updateSectionsOnScroll, 50));
+        window.addEventListener('resize', updateSectionsOnScroll);
+        document.addEventListener('DOMContentLoaded', updateSectionsOnScroll);
+
+        // Certificate overlay with animation - NO DELAY
         function openCert(src) {
-            let overlay = document.createElement("div");
-            overlay.className = "overlay";
-            overlay.onclick = () => overlay.remove();
+        let overlay = document.createElement("div");
+        overlay.className = "overlay";
+        overlay.onclick = () => overlay.remove();
 
-            let img = document.createElement("img");
-            img.src = src;
-            overlay.appendChild(img);
-            document.body.appendChild(overlay);
+        let img = document.createElement("img");
+        img.src = src;
+        overlay.appendChild(img);
+        document.body.appendChild(overlay);
         }
+
+        // Navbar slide down on load with 2x slower animation and 0.5s delay
+        window.addEventListener('load', () => {
+        setTimeout(() => {
+        document.querySelector('.top-nav').classList.add('loaded');
+        }, 500); // 0.5 second delay
+        });
 
         // Easter Egg
         document.addEventListener("keydown", (e) => {
-            if (e.code === "KeyG") {
-                window.location.href = "nova_dash_game";
-            }
+        if (e.code === "KeyG") {
+        window.location.href = "nova_dash_game";
+        }
         });
     </script>
 </body>
