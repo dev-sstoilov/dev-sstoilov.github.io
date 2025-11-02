@@ -34,7 +34,7 @@
             }
 
         html {
-            scroll-behavior: smooth;
+            scroll-behavior: auto;
         }
 
         body {
@@ -1242,6 +1242,177 @@
         window.location.href = "nova_dash_game";
         }
         });
+        // ---- REALISTIC MOMENTUM SCROLLING WITH ACCELERATION ----
+        (() => {
+            let velocity = 0;
+            let animating = false;
+            let rafId = null;
+            let lastWheelSign = 0;
+            let lastTouchY = null;
+            let isPointerActive = false;
+
+            // Tunable parameters
+            const maxVel = 300;          // Maximum velocity
+            const minStop = 0.05;        // When to stop animation
+            const frameFriction = 0.95;  // Momentum decay per frame
+            const wheelMultiplier = 0.375; // Acceleration from mouse wheel
+            const touchMultiplier = 1.4; // Acceleration from touch drag
+            const smoothPosFactor = 0.14; // Position interpolation (smaller = smoother)
+
+            // Ensure nav stays fixed
+            const nav = document.querySelector('.top-nav');
+            if (nav) {
+                nav.style.position = 'fixed';
+                nav.style.top = '0';
+                nav.style.left = '0';
+                nav.style.right = '0';
+                nav.style.zIndex = '1000';
+            }
+
+            function maxScroll() {
+                return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            }
+
+            let renderedY = window.scrollY;
+
+            function step() {
+                renderedY += velocity;
+
+                const bound = maxScroll();
+                if (renderedY < 0) {
+                    renderedY = 0;
+                    velocity = 0;
+                } else if (renderedY > bound) {
+                    renderedY = bound;
+                    velocity = 0;
+                }
+
+                const current = window.scrollY;
+                const diff = renderedY - current;
+                if (Math.abs(diff) > 0.5) {
+                    window.scrollTo(0, current + diff * smoothPosFactor);
+                }
+
+                velocity *= frameFriction;
+
+                if (Math.abs(velocity) < minStop && !isPointerActive) {
+                    velocity = 0;
+                    animating = false;
+                    rafId = null;
+                    return;
+                }
+
+                rafId = requestAnimationFrame(step);
+            }
+
+            function ensureAnimating() {
+                if (!animating) {
+                    animating = true;
+                    renderedY = window.scrollY;
+                    rafId = requestAnimationFrame(step);
+                }
+            }
+
+            // ---- Mouse Wheel ----
+            function onWheel(e) {
+                const delta = e.deltaY;
+                if (!delta) return;
+
+                const sign = Math.sign(delta);
+                if (lastWheelSign && sign !== lastWheelSign) {
+                    velocity = 0; // reset on direction change
+                }
+                lastWheelSign = sign;
+
+                // Acceleration with scaling factor
+                velocity += delta * wheelMultiplier * (1 + Math.abs(velocity) * 0.01);
+                velocity = Math.max(-maxVel, Math.min(maxVel, velocity));
+
+                isPointerActive = true;
+                ensureAnimating();
+
+                clearTimeout(onWheel._clearTimer);
+                onWheel._clearTimer = setTimeout(() => { isPointerActive = false; }, 120);
+
+                e.preventDefault();
+            }
+
+            // ---- Touch Scrolling ----
+            function onTouchStart(e) {
+                if (e.touches && e.touches.length) {
+                    lastTouchY = e.touches[0].clientY;
+                    isPointerActive = true;
+                    lastWheelSign = 0;
+                }
+            }
+
+            function onTouchMove(e) {
+                if (!lastTouchY || !e.touches || !e.touches.length) return;
+                const y = e.touches[0].clientY;
+                const delta = lastTouchY - y;
+                lastTouchY = y;
+
+                velocity += delta * touchMultiplier * (1 + Math.abs(velocity) * 0.01);
+                velocity = Math.max(-maxVel, Math.min(maxVel, velocity));
+
+                ensureAnimating();
+                e.preventDefault();
+
+                clearTimeout(onTouchMove._clearTimer);
+                onTouchMove._clearTimer = setTimeout(() => { isPointerActive = false; lastTouchY = null; }, 120);
+            }
+
+            function onTouchEnd() {
+                lastTouchY = null;
+                clearTimeout(onTouchEnd._clearTimer);
+                onTouchEnd._clearTimer = setTimeout(() => { isPointerActive = false; }, 120);
+            }
+
+            // ---- Cancel Momentum on Programmatic Scrolls ----
+            function cancelMomentum() {
+                velocity = 0;
+                isPointerActive = false;
+                lastWheelSign = 0;
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                    animating = false;
+                }
+            }
+
+            document.querySelectorAll('.nav-tab, .mobile-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    cancelMomentum(); // tab scroll overrides momentum
+                }, { passive: true });
+            });
+
+            window.addEventListener('keydown', e => {
+                const keys = ['PageUp', 'PageDown', 'ArrowUp', 'ArrowDown', 'Home', 'End', ' '];
+                if (keys.includes(e.key)) cancelMomentum();
+            }, { passive: true });
+
+            // ---- Event bindings ----
+            window.addEventListener('wheel', onWheel, { passive: false });
+            window.addEventListener('touchstart', onTouchStart, { passive: false });
+            window.addEventListener('touchmove', onTouchMove, { passive: false });
+            window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+            window.addEventListener('scroll', () => {
+                renderedY = window.scrollY; // keep synced when user drags scrollbar
+            }, { passive: true });
+
+            // ---- Disable CSS smooth-scroll (it conflicts) ----
+            document.documentElement.style.scrollBehavior = 'auto';
+
+            // ---- Cleanup ----
+            window.addEventListener('beforeunload', () => {
+                cancelMomentum();
+                window.removeEventListener('wheel', onWheel);
+                window.removeEventListener('touchstart', onTouchStart);
+                window.removeEventListener('touchmove', onTouchMove);
+                window.removeEventListener('touchend', onTouchEnd);
+            });
+        })();
     </script>
 </body>
 </html>
